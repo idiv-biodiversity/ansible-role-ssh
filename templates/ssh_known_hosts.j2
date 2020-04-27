@@ -1,0 +1,4 @@
+# {{ ansible_managed }}
+{% for host in ssh_known_hosts %}
+{{ host.aliases | join(',') }} {{ host.type }} {{ host.key }}
+{% endfor %}

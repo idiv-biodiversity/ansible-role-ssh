@@ -1,0 +1,107 @@
+---
+
+- name: install openssh
+  package:
+    name: openssh
+
+# -----------------------------------------------------------------------------
+# authorized keys
+# -----------------------------------------------------------------------------
+
+- name: create authorized keys directory
+  file:
+    path: /etc/ssh/authorized_keys
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: ssh_users is defined
+
+- name: deploy authorized keys
+  authorized_key:
+    user: '{{ user.name }}'
+    key: '{{ user.authorized_keys }}'
+    path: '/etc/ssh/authorized_keys/{{ user.name }}'
+    manage_dir: no
+    exclusive: yes
+  when: ssh_users is defined
+  loop: '{{ ssh_users }}'
+  loop_control:
+    loop_var: user
+    label: '{{ user.name }}'
+
+# -----------------------------------------------------------------------------
+# known hosts
+# -----------------------------------------------------------------------------
+
+- name: deploy known hosts
+  template:
+    src: ssh_known_hosts.j2
+    dest: /etc/ssh/ssh_known_hosts
+    owner: root
+    group: root
+    mode: 0644
+  when: ssh_known_hosts is defined
+  tags:
+    - ssh-known-hosts
+
+# -----------------------------------------------------------------------------
+# moduli
+# -----------------------------------------------------------------------------
+
+- name: check /etc/ssh/moduli
+  script: 'check-moduli.sh {{ ssh_modulus_min }}'
+  when: ssh_modulus_min is defined
+  register: ssh_moduli_check
+  check_mode: no
+  changed_when: >-
+    (ssh_moduli_check.stdout | int) > 0
+  tags:
+    - ssh-sshd-config
+    - ssh-moduli
+
+- name: remove small moduli from /etc/ssh/moduli
+  script: 'mod-moduli.sh {{ ssh_modulus_min }}'
+  when: >-
+    not ansible_check_mode and
+    ssh_modulus_min is defined and
+    ssh_moduli_check.changed
+  register: ssh_moduli_configured
+  changed_when: >-
+    ssh_moduli_configured.stdout.find('XXXchangedXXX') != -1
+  notify:
+    - reload SSH daemon
+  tags:
+    - ssh-sshd-config
+    - ssh-moduli
+
+# -----------------------------------------------------------------------------
+# sshd_config
+# -----------------------------------------------------------------------------
+
+- name: deploy SSH daemon configuration
+  template:
+    src: sshd_config.conf
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+    validate: /usr/sbin/sshd -t -f %s
+  notify:
+    - reload SSH daemon
+  tags:
+    - ssh-sshd-config
+
+# -----------------------------------------------------------------------------
+# service
+# -----------------------------------------------------------------------------
+
+- name: enable SSH service and assure it is started
+  service:
+    name: sshd
+    enabled: yes
+    state: started
+  tags:
+    - service
+
+...
