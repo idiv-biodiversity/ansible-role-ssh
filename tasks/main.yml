@@ -1,8 +1,11 @@
 ---
 
+- name: include OS-specific vars
+  include_vars: '{{ ansible_os_family | lower }}.yml'
+
 - name: install openssh
   package:
-    name: openssh
+    name: '{{ ssh_packages }}'
 
 # -----------------------------------------------------------------------------
 # authorized keys
@@ -81,7 +84,7 @@
 
 - name: deploy SSH daemon configuration
   template:
-    src: sshd_config.conf
+    src: 'sshd_config_{{ ansible_os_family | lower }}.conf'
     dest: /etc/ssh/sshd_config
     owner: root
     group: root
