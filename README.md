@@ -65,6 +65,9 @@ ssh_strict_modes: yes
 
 ssh_pubkey_authentication: yes
 
+ssh_pubkey_accepted_key_types:
+  - ssh-ed25519
+
 ssh_password_authentication: yes
 
 ssh_permit_empty_password: no
