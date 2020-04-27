@@ -122,11 +122,15 @@ ssh_users:
     authorized_keys: |
       ssh-ed25519 xxx alice@workstation
       ssh-ed25519 xxx alice@laptop
+    settings:
+      AuthenticationMethods: publickey
 
   - name: bob
     authorized_keys: |
       ssh-ed25519 xxx bob@workstation
       ssh-ed25519 xxx bob@laptop
+    settings:
+      AuthenticationMethods: publickey
 
 ```
 
