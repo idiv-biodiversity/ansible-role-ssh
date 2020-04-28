@@ -20,6 +20,12 @@ galaxy_info:
       versions:
         - 7
 
+    - name: Ubuntu
+      versions:
+        - xenial
+        - bionic
+        - focal
+
   galaxy_tags:
     - ssh
 
