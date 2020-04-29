@@ -11,27 +11,14 @@
 # authorized keys
 # -----------------------------------------------------------------------------
 
-- name: create authorized keys directory
-  file:
-    path: /etc/ssh/authorized_keys
-    state: directory
-    owner: root
-    group: root
-    mode: 0755
-  when: ssh_users is defined
-
 - name: deploy authorized keys
-  authorized_key:
-    user: '{{ user.name }}'
-    key: '{{ user.authorized_keys }}'
-    path: '/etc/ssh/authorized_keys/{{ user.name }}'
-    manage_dir: no
-    exclusive: yes
-  when: ssh_users is defined
-  loop: '{{ ssh_users }}'
-  loop_control:
-    loop_var: user
-    label: '{{ user.name }}'
+  include_tasks: 'authorized-keys.yml'
+  when: >-
+    ssh_users | default([]) |
+      selectattr('authorized_keys', 'defined') |
+      list | length
+  tags:
+    - ssh-authorized-keys
 
 # -----------------------------------------------------------------------------
 # known hosts

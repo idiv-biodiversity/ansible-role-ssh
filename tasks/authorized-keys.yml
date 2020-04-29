@@ -1,0 +1,27 @@
+---
+
+- name: create authorized keys directory
+  file:
+    path: /etc/ssh/authorized_keys
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - ssh-authorized-keys
+
+- name: deploy authorized keys
+  authorized_key:
+    user: '{{ user.name }}'
+    key: '{{ user.authorized_keys }}'
+    path: '/etc/ssh/authorized_keys/{{ user.name }}'
+    manage_dir: no
+    exclusive: yes
+  loop: '{{ ssh_users | selectattr("authorized_keys", "defined") | list }}'
+  loop_control:
+    loop_var: user
+    label: '{{ user.name }}'
+  tags:
+    - ssh-authorized-keys
+
+...
