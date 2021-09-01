@@ -7,6 +7,8 @@ app=$(basename "$0" .sh)
   exit 1
 }
 
+cd /root
+
 min_modulus=$1
 
 awk -v min_modulus="$min_modulus" \
