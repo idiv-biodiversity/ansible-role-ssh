@@ -5,7 +5,7 @@
 
 - name: install openssh
   package:
-    name: '{{ ssh_packages }}'
+    name: '{{ __ssh_packages }}'
 
 # -----------------------------------------------------------------------------
 # authorized keys

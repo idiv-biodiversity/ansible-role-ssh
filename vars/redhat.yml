@@ -1,5 +1,5 @@
 ---
 
-ssh_packages: openssh-server
+__ssh_packages: openssh-server
 
 ...
