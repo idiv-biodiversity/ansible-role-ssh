@@ -8,12 +8,6 @@ app=$(basename "$0" .sh)
 }
 
 cd /root
-echo $1
-args="$@"
-if (( $n > 3.5 ))
-then
-  echo foo
-fi
 
 min_modulus=$1
 
