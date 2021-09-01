@@ -1,5 +1,5 @@
 ---
 
-ssh_packages: openssh
+__ssh_packages: openssh
 
 ...
