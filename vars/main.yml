@@ -1,0 +1,23 @@
+---
+
+__ssh_distro: >-
+  {{ ansible_distribution | lower }}
+
+__ssh_os: >-
+  {{ ansible_os_family | lower }}
+
+__ssh_distro_version: >-
+  {{ __ssh_distro }}_{{ ansible_distribution_major_version }}
+
+__ssh_os_version: >-
+  {{ __ssh_os }}_{{ ansible_distribution_major_version }}
+
+__ssh_sshd_config_templates:
+  files:
+    - 'sshd_config_{{ __ssh_distro_version }}.conf'
+    - 'sshd_config_{{ __ssh_os_version }}.conf'
+    - 'sshd_config_{{ __ssh_os }}.conf'
+  paths:
+    - templates
+
+...
