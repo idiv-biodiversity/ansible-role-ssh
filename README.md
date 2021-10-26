@@ -84,7 +84,9 @@ ssh_tcp_forwarding: yes
 
 ssh_x11_forwarding: no
 
-ssh_banner: /etc/ssh/banner
+ssh_banner:
+  src: path/to/local/ssh-banner
+  dest: /etc/ssh/banner
 
 ssh_subsystems:
   - name: sftp

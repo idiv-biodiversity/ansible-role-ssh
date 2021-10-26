@@ -66,6 +66,25 @@
     - ssh-moduli
 
 # -----------------------------------------------------------------------------
+# banner
+# -----------------------------------------------------------------------------
+
+- name: deploy ssh banner
+  copy:
+    src: '{{ ssh_banner.src }}'
+    dest: '{{ ssh_banner.dest }}'
+    owner: root
+    group: root
+    mode: 0644
+  when: >
+    ssh_banner is defined and
+    ssh_banner.src is defined and
+    ssh_banner.dest is defined
+  tags:
+    - ssh-banner
+    - ssh-sshd-config
+
+# -----------------------------------------------------------------------------
 # sshd_config
 # -----------------------------------------------------------------------------
 
@@ -80,6 +99,7 @@
   notify:
     - reload SSH daemon
   tags:
+    - ssh-banner
     - ssh-sshd-config
 
 # -----------------------------------------------------------------------------
