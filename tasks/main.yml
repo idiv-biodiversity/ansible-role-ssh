@@ -96,8 +96,7 @@
     group: root
     mode: 0644
     validate: /usr/sbin/sshd -t -f %s
-  notify:
-    - reload SSH daemon
+  register: __sshd_configuration
   tags:
     - ssh-banner
     - ssh-sshd-config
@@ -110,7 +109,12 @@
   service:
     name: sshd
     enabled: yes
-    state: started
+    state: >-
+      {{
+        __sshd_configuration.changed |
+          default(False) |
+          ternary("reloaded", "started")
+      }}
   tags:
     - service
 
