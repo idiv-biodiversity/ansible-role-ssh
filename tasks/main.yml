@@ -56,11 +56,9 @@
     not ansible_check_mode and
     ssh_modulus_min is defined and
     ssh_moduli_check.changed
-  register: ssh_moduli_configured
+  register: __ssh_moduli
   changed_when: >-
-    ssh_moduli_configured.stdout.find('XXXchangedXXX') != -1
-  notify:
-    - reload SSH daemon
+    __ssh_moduli.stdout.find('XXXchangedXXX') != -1
   tags:
     - ssh-sshd-config
     - ssh-moduli
@@ -111,7 +109,7 @@
     enabled: yes
     state: >-
       {{
-        __sshd_configuration.changed |
+        __sshd_configuration.changed or __ssh_moduli.changed |
           default(False) |
           ternary("reloaded", "started")
       }}
