@@ -1,7 +1,7 @@
 ---
 
 - name: create authorized keys directory
-  file:
+  ansible.builtin.file:
     path: /etc/ssh/authorized_keys
     state: directory
     owner: root
@@ -11,7 +11,7 @@
     - ssh-authorized-keys
 
 - name: deploy authorized keys
-  authorized_key:
+  ansible.posix.authorized_key:
     user: '{{ user.name }}'
     key: '{{ user.authorized_keys }}'
     path: '/etc/ssh/authorized_keys/{{ user.name }}'
