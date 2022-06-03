@@ -109,8 +109,8 @@
     enabled: yes
     state: >-
       {{
-        __sshd_configuration.changed or __ssh_moduli.changed |
-          default(False) |
+        (__sshd_configuration.changed or __ssh_moduli.changed |
+          default(False)) |
           ternary("reloaded", "started")
       }}
   tags:
