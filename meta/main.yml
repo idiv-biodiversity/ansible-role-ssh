@@ -4,6 +4,8 @@ dependencies: []
 
 galaxy_info:
   role_name: ssh
+  namespace: idiv_biodiversity
+
   author: Christian Krause
   description: 'install and configure OpenSSH'
   company: German Centre for Integrative Biodiversity Research (iDiv)
