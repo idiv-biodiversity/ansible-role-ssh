@@ -99,6 +99,29 @@
     - ssh-banner
     - ssh-sshd-config
 
+- name: do we need conf.d
+  ansible.builtin.set_fact:
+    __ssh_sshd_config_d_enabled: '{{ __ssh_os_version == "redhat_9" }}'
+
+- name: show conf.d enabled
+  ansible.builtin.debug:
+    var: __ssh_sshd_config_d_enabled
+  when: ansible_check_mode | bool
+
+- name: deploy SSH daemon configuration to conf.d
+  ansible.builtin.template:
+    src: '{{ lookup("first_found", __ssh_sshd_config_d_templates) }}'
+    dest: /etc/ssh/sshd_config.d/90-ansible.conf
+    owner: root
+    group: root
+    mode: 0600
+    validate: /usr/sbin/sshd -t -f %s
+  when: __ssh_sshd_config_d_enabled
+  register: __sshd_configuration_conf_d
+  tags:
+    - ssh-banner
+    - ssh-sshd-config
+
 # -----------------------------------------------------------------------------
 # service
 # -----------------------------------------------------------------------------
@@ -109,9 +132,17 @@
     enabled: yes
     state: >-
       {{
-        (__sshd_configuration.changed | default(False) or __ssh_moduli.changed |
-          default(False)) |
-          ternary("reloaded", "started")
+        (
+          (
+            __sshd_configuration.changed | default(False)
+            or
+            __sshd_configuration_conf_d.changed | default(False)
+            or
+            __ssh_moduli.changed
+          )
+            | default(False)
+        )
+          | ternary("reloaded", "started")
       }}
   tags:
     - service

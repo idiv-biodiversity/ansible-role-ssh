@@ -20,4 +20,12 @@ __ssh_sshd_config_templates:
   paths:
     - templates
 
+__ssh_sshd_config_d_templates:
+  files:
+    - 'sshd_config_d_90_{{ __ssh_distro_version }}.conf'
+    - 'sshd_config_d_90_{{ __ssh_os_version }}.conf'
+    - 'sshd_config_d_90_{{ __ssh_os }}.conf'
+  paths:
+    - templates
+
 ...
