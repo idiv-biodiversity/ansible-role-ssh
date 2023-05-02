@@ -31,6 +31,12 @@ Role Variables
 --------------
 
 ```yml
+ssh_accept_env:
+  - "LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES"
+  - "LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT"
+  - "LC_IDENTIFICATION LC_ALL LANGUAGE"
+  - "XMODIFIERS"
+
 ssh_host_keys:
   - /etc/ssh/ssh_host_ed25519_key
 
