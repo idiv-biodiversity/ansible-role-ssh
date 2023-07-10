@@ -25,7 +25,7 @@ Table of Contents
 Requirements
 ------------
 
-None.
+- Ansible 2.9
 
 Role Variables
 --------------
