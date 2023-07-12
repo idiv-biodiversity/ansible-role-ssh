@@ -7,6 +7,7 @@
 - name: install openssh
   ansible.builtin.package:
     name: '{{ __ssh_packages }}'
+  become: yes
 
 # -----------------------------------------------------------------------------
 # authorized keys
@@ -95,6 +96,7 @@
     group: root
     mode: 0644
     validate: /usr/sbin/sshd -t -f %s
+  become: yes
   register: __sshd_configuration
   tags:
     - ssh-banner
@@ -117,6 +119,7 @@
     group: root
     mode: 0600
     validate: /usr/sbin/sshd -t -f %s
+  become: yes
   when: __ssh_sshd_config_d_enabled
   register: __sshd_configuration_conf_d
   tags:
@@ -145,6 +148,7 @@
         )
           | ternary("reloaded", "started")
       }}
+  become: yes
   tags:
     - service
 
