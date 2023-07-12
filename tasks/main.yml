@@ -85,6 +85,26 @@
     - ssh-sshd-config
 
 # -----------------------------------------------------------------------------
+# generate host keys
+# -----------------------------------------------------------------------------
+
+# host keys are checked by `sshd -t` (used later in validation)
+
+# This is needed on first pass, when the package wasn't installed yet and the
+# service never ran. Some distros have no post install task for this, but a
+# service dependency from the main service to a gen keys service, so we
+# manually need to trigger this service to have the host keys.
+
+- name: generate host keys
+  ansible.builtin.service:
+    name: '{{ __ssh_genkeys }}'
+    state: started
+  become: yes
+  when: __ssh_genkeys is defined
+  tags:
+    - ssh-host-keys
+
+# -----------------------------------------------------------------------------
 # sshd_config
 # -----------------------------------------------------------------------------
 

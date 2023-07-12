@@ -2,4 +2,6 @@
 
 __ssh_packages: openssh
 
+__ssh_genkeys: sshdgenkeys.service
+
 ...
