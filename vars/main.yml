@@ -55,4 +55,15 @@ __ssh_sshd_config_d_templates:
   paths:
     - templates
 
+# -----------------------------------------------------------------------------
+# other
+# -----------------------------------------------------------------------------
+
+__ssh_virtualized: >-
+  {{
+    ansible_facts.virtualization_role == "guest"
+    and
+    ansible_facts.virtualization_type == "docker"
+  }}
+
 ...

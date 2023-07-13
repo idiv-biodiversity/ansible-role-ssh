@@ -4,7 +4,14 @@
   ansible.builtin.include_vars: >-
     {{ lookup("ansible.builtin.first_found", __ssh_vars_files) }}
 
-- name: install openssh
+- name: update package cache
+  ansible.builtin.package:
+    update_cache: yes
+  become: yes
+  when:
+    - __ssh_virtualized
+
+- name: 'install packages {{ __ssh_packages }}'
   ansible.builtin.package:
     name: '{{ __ssh_packages }}'
   become: yes
