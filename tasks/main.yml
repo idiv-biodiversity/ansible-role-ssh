@@ -112,6 +112,19 @@
     - ssh-host-keys
 
 # -----------------------------------------------------------------------------
+# privilege separation
+# -----------------------------------------------------------------------------
+
+- name: create privilege separation directory
+  ansible.builtin.file:
+    path: /run/sshd
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  when: __ssh_distro == 'ubuntu'
+
+# -----------------------------------------------------------------------------
 # sshd_config
 # -----------------------------------------------------------------------------
 
