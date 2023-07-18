@@ -1,5 +1,9 @@
 ---
 
+# -----------------------------------------------------------------------------
+# distro / os handles
+# -----------------------------------------------------------------------------
+
 __ssh_distro: >-
   {{ ansible_distribution | lower }}
 
@@ -12,19 +16,42 @@ __ssh_distro_version: >-
 __ssh_os_version: >-
   {{ __ssh_os }}_{{ ansible_distribution_major_version }}
 
+# -----------------------------------------------------------------------------
+# first found snippets
+# -----------------------------------------------------------------------------
+
+__ssh_first_found:
+  - '{{ __ssh_distro_version }}'
+  - '{{ __ssh_os_version }}'
+  - '{{ __ssh_distro }}'
+  - '{{ __ssh_os }}'
+  - default
+
+__ssh_vars_files:
+  files: >-
+    {{ __ssh_first_found | map('regex_replace', '$', '.yml') | list }}
+  paths:
+    - vars
+
 __ssh_sshd_config_templates:
-  files:
-    - 'sshd_config_{{ __ssh_distro_version }}.conf'
-    - 'sshd_config_{{ __ssh_os_version }}.conf'
-    - 'sshd_config_{{ __ssh_os }}.conf'
+  files: >-
+    {{
+      __ssh_first_found |
+        map('regex_replace', '^', 'sshd_config_') |
+        map('regex_replace', '$', '.conf') |
+        list
+    }}
   paths:
     - templates
 
 __ssh_sshd_config_d_templates:
-  files:
-    - 'sshd_config_d_90_{{ __ssh_distro_version }}.conf'
-    - 'sshd_config_d_90_{{ __ssh_os_version }}.conf'
-    - 'sshd_config_d_90_{{ __ssh_os }}.conf'
+  files: >-
+    {{
+      __ssh_first_found |
+        map('regex_replace', '^', 'sshd_config_d_') |
+        map('regex_replace', '$', '.conf') |
+        list
+    }}
   paths:
     - templates
 
