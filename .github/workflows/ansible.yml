@@ -17,4 +17,35 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ansible/ansible-lint-action@v6
 
+  molecule:
+    needs:
+      - ansible-lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        distro:
+          - archlinux
+          - centos-8
+          - rocky-8
+          - rocky-9
+          - ubuntu-bionic
+          - ubuntu-focal
+          - ubuntu-jammy
+        scenario:
+          - default
+          - alternative
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip3 install ansible molecule molecule-plugins[docker] docker
+      - run: ansible --version
+      - run: molecule --version
+      - run: molecule test -p ${{ matrix.distro }} -s ${{ matrix.scenario }}
+        env:
+          ANSIBLE_DIFF_ALWAYS: 'True'
+          PY_COLORS: '1'
+
 ...
