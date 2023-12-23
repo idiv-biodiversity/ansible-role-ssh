@@ -170,10 +170,9 @@
 # service
 # -----------------------------------------------------------------------------
 
-- name: enable SSH service and assure it is started
+- name: start sshd service
   ansible.builtin.service:
     name: sshd
-    enabled: yes
     state: >-
       {{
         (
@@ -188,6 +187,14 @@
         )
           | ternary("reloaded", "started")
       }}
+  become: yes
+  tags:
+    - service
+
+- name: enable sshd service
+  ansible.builtin.service:
+    name: sshd
+    enabled: yes
   become: yes
   tags:
     - service
