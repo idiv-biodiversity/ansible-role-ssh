@@ -1,7 +1,0 @@
----
-
-__ssh_packages: openssh-server
-
-__ssh_genkeys: sshd-keygen.service
-
-...
