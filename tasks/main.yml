@@ -51,10 +51,10 @@
 - name: check /etc/ssh/moduli
   ansible.builtin.script: 'check-moduli.sh {{ ssh_modulus_min }}'
   when: ssh_modulus_min is defined
-  register: ssh_moduli_check
+  register: __ssh_moduli_check
   check_mode: no
   changed_when: >-
-    (ssh_moduli_check.stdout | int) > 0
+    (__ssh_moduli_check.stdout | int) > 0
   tags:
     - ssh-sshd-config
     - ssh-moduli
@@ -64,7 +64,7 @@
   when: >-
     not ansible_check_mode and
     ssh_modulus_min is defined and
-    ssh_moduli_check.changed
+    __ssh_moduli_check.changed
   register: __ssh_moduli
   changed_when: >-
     __ssh_moduli.stdout.find('XXXchangedXXX') != -1
