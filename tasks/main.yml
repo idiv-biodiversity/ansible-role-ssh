@@ -111,7 +111,7 @@
 - name: deploy SSH daemon configuration to conf.d
   ansible.builtin.template:
     src: '{{ lookup("first_found", __ssh_sshd_config_d_templates) }}'
-    dest: /etc/ssh/sshd_config.d/90-ansible.conf
+    dest: /etc/ssh/sshd_config.d/10-ansible.conf
     owner: root
     group: root
     mode: 0600
