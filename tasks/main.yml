@@ -128,42 +128,11 @@
 # sshd_config
 # -----------------------------------------------------------------------------
 
-- name: deploy SSH daemon configuration
-  ansible.builtin.template:
-    src: '{{ lookup("first_found", __ssh_sshd_config_templates) }}'
-    dest: /etc/ssh/sshd_config
-    owner: root
-    group: root
-    mode: 0644
-    validate: /usr/sbin/sshd -t -f %s
-  become: yes
-  register: __sshd_configuration
+- name: ssh server configuration
+  ansible.builtin.import_tasks: configuration-sshd.yml
   tags:
     - ssh-banner
-    - ssh-sshd-config
-
-- name: do we need conf.d
-  ansible.builtin.set_fact:
-    __ssh_sshd_config_d_enabled: '{{ __ssh_os_version == "redhat_9" }}'
-
-- name: show conf.d enabled
-  ansible.builtin.debug:
-    var: __ssh_sshd_config_d_enabled
-  when: ansible_check_mode | bool
-
-- name: deploy SSH daemon configuration to conf.d
-  ansible.builtin.template:
-    src: '{{ lookup("first_found", __ssh_sshd_config_d_templates) }}'
-    dest: /etc/ssh/sshd_config.d/10-ansible.conf
-    owner: root
-    group: root
-    mode: 0600
-    validate: /usr/sbin/sshd -t -f %s
-  become: yes
-  when: __ssh_sshd_config_d_enabled
-  register: __sshd_configuration_conf_d
-  tags:
-    - ssh-banner
+    - ssh-config
     - ssh-sshd-config
 
 # -----------------------------------------------------------------------------

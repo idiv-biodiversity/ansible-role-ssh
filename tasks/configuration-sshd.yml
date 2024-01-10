@@ -1,0 +1,26 @@
+---
+
+- name: configure sshd in /etc/ssh/sshd_config
+  ansible.builtin.template:
+    src: '{{ lookup("first_found", __ssh_sshd_config_templates) }}'
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: 0644
+    validate: /usr/sbin/sshd -t -f %s
+  become: yes
+  register: __sshd_configuration
+
+- name: configure sshd in /etc/ssh/sshd_config.d/10-ansible.conf
+  ansible.builtin.template:
+    src: '{{ lookup("first_found", __ssh_sshd_config_d_templates) }}'
+    dest: /etc/ssh/sshd_config.d/10-ansible.conf
+    owner: root
+    group: root
+    mode: 0600
+    validate: /usr/sbin/sshd -t -f %s
+  become: yes
+  when: __ssh_has_conf_d
+  register: __sshd_configuration_conf_d
+
+...

@@ -4,4 +4,6 @@ __ssh_packages: openssh
 
 __ssh_genkeys: sshdgenkeys.service
 
+__ssh_has_conf_d: yes
+
 ...

@@ -4,6 +4,6 @@ __ssh_packages: openssh-server
 
 __ssh_genkeys: sshd-keygen.target
 
-__ssh_has_conf_d: yes
+__ssh_has_conf_d: no
 
 ...
