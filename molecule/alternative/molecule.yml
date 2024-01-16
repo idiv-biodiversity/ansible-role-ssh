@@ -78,6 +78,7 @@ provisioner:
           - aes256-ctr
         ssh_macs:
           - hmac-sha2-512-etm@openssh.com
+        ssh_modulus_min: 3071
     host_vars:
       archlinux:
         ansible_user: ansible
