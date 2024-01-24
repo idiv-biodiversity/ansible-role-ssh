@@ -3,6 +3,10 @@
 - name: include OS-specific vars
   ansible.builtin.include_vars: >-
     {{ lookup("ansible.builtin.first_found", __ssh_vars_files) }}
+  tags:
+    - ssh-banner
+    - ssh-config
+    - ssh-sshd-config
 
 - name: update package cache
   ansible.builtin.package:
@@ -57,8 +61,8 @@
   changed_when: >-
     (__ssh_moduli_check.stdout | int) > 0
   tags:
-    - ssh-sshd-config
     - ssh-moduli
+    - ssh-sshd-config
 
 - name: remove small moduli from /etc/ssh/moduli # noqa no-handler
   ansible.builtin.script: 'mod-moduli.sh {{ ssh_modulus_min }}'
@@ -71,8 +75,8 @@
   changed_when: >-
     __ssh_moduli.stdout.find('XXXchangedXXX') != -1
   tags:
-    - ssh-sshd-config
     - ssh-moduli
+    - ssh-sshd-config
 
 # -----------------------------------------------------------------------------
 # banner
@@ -161,6 +165,7 @@
   become: yes
   tags:
     - service
+    - ssh-service
 
 - name: enable sshd service
   ansible.builtin.service:
@@ -169,5 +174,6 @@
   become: yes
   tags:
     - service
+    - ssh-service
 
 ...
