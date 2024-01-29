@@ -35,6 +35,7 @@ jobs:
         scenario:
           - default
           - alternative
+          - nosubsystems
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

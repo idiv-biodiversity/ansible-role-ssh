@@ -93,7 +93,19 @@ ssh_x11_forwarding: no
 ssh_banner:
   src: path/to/local/ssh-banner
   dest: /etc/ssh/banner
+```
 
+**Note:** Most distros define the `sftp` subsystem in `/etc/ssh/sshd_config`,
+because the default of OpenSSH is to not have any subsystem enabled. This entry
+will be removed from `/etc/ssh/sshd_config` if `ssh_subsystems` is defined
+(**!**), even if your distro uses `Include /etc/ssh/sshd_config.d/*.conf`. This
+is because `sshd` would complain with `Subsystem 'sftp' already defined.` and
+not start properly if the `sftp` subsystem were defined multiple times, i.e.
+both in `/etc/ssh/sshd_config` and somewhere in `/etc/ssh/sshd_config.d`.
+**Thus, if you want subsystems other than `sftp`, you will still need to add
+`sftp` to the subsystem list explicitly, if you want it enabled.**
+
+```yml
 ssh_subsystems:
   - name: sftp
     command: /usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO

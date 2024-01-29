@@ -15,8 +15,6 @@ platforms:
     pre_build_image: yes
 
   - name: centos-8
-    groups:
-      - redhat
     image: geerlingguy/docker-centos8-ansible
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -26,8 +24,6 @@ platforms:
     pre_build_image: yes
 
   - name: rocky-8
-    groups:
-      - redhat
     image: geerlingguy/docker-rockylinux8-ansible
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -37,8 +33,6 @@ platforms:
     pre_build_image: yes
 
   - name: rocky-9
-    groups:
-      - redhat
     image: geerlingguy/docker-rockylinux9-ansible
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -48,8 +42,6 @@ platforms:
     pre_build_image: yes
 
   - name: ubuntu-bionic
-    groups:
-      - ubuntu
     image: geerlingguy/docker-ubuntu1804-ansible
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -59,8 +51,6 @@ platforms:
     pre_build_image: yes
 
   - name: ubuntu-focal
-    groups:
-      - ubuntu
     image: geerlingguy/docker-ubuntu2004-ansible
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -70,8 +60,6 @@ platforms:
     pre_build_image: yes
 
   - name: ubuntu-jammy
-    groups:
-      - ubuntu
     image: geerlingguy/docker-ubuntu2204-ansible
     command: ${MOLECULE_DOCKER_COMMAND:-""}
     volumes:
@@ -87,26 +75,10 @@ provisioner:
   inventory:
     group_vars:
       all:
-        ssh_ciphers:
-          - aes256-gcm@openssh.com
-          - aes256-ctr
-        ssh_macs:
-          - hmac-sha2-512-etm@openssh.com
-        ssh_modulus_min: 3071
-      redhat:
-        ssh_subsystems:
-          - name: sftp
-            command: '/usr/libexec/openssh/sftp-server -f AUTHPRIV -l INFO'
-      ubuntu:
-        ssh_subsystems:
-          - name: sftp
-            command: '/usr/lib/openssh/sftp-server -f AUTHPRIV -l INFO'
+        ssh_subsystems: []
     host_vars:
       archlinux:
         ansible_user: ansible
-        ssh_subsystems:
-          - name: sftp
-            command: '/usr/lib/ssh/sftp-server -f AUTHPRIV -l INFO'
 
 verifier:
   name: ansible
