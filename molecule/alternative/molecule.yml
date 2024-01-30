@@ -94,6 +94,7 @@ provisioner:
           - hmac-sha2-512-etm@openssh.com
         ssh_modulus_min: 3071
       redhat:
+        ssh_opt_out_crypto_policies: yes
         ssh_subsystems:
           - name: sftp
             command: '/usr/libexec/openssh/sftp-server -f AUTHPRIV -l INFO'

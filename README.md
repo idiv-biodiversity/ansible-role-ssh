@@ -13,6 +13,7 @@ Table of Contents
   * [Known Hosts](#known-hosts)
   * [Authorized Keys and User Management](#authorized-keys-and-user-management)
   * [Moduli](#moduli)
+  * [Distro Specifics](#distro-specifics)
 - [Dependencies](#dependencies)
 - [Example Playbook](#example-playbook)
   * [Top-Level Playbook](#top-level-playbook)
@@ -164,6 +165,16 @@ To configure the minimum modulus for `/etc/ssh/moduli`:
 ```yml
 ssh_modulus_min: 3071
 ```
+
+### Distro Specifics
+
+Opt out of distro-specific crypto policies (at the time of writing applies only
+to RHEL 8 and derivatives):
+
+```yml
+ssh_opt_out_crypto_policies: no
+```
+
 
 Dependencies
 ------------

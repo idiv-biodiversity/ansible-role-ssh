@@ -1,5 +1,15 @@
 ---
 
+- name: opt out of crypto policies
+  ansible.builtin.lineinfile:
+    path: /etc/sysconfig/sshd
+    regexp: CRYPTO_POLICY=
+    line: CRYPTO_POLICY=
+  become: yes
+  when:
+    - ssh_opt_out_crypto_policies | default(False)
+    - __ssh_os_version == 'redhat_8'
+
 - name: configure sshd in /etc/ssh/sshd_config
   ansible.builtin.template:
     src: '{{ lookup("first_found", __ssh_sshd_config_templates) }}'
